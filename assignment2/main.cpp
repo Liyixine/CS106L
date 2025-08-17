@@ -14,7 +14,7 @@
 #include <string>
 #include <unordered_set>
 
-std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
+std::string kYourName = ""; // Don't forget to change this!
 
 /**
  * Takes in a file name and returns a set containing all of the applicant names as a set.
@@ -29,8 +29,21 @@ std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
  */
 std::set<std::string> get_applicants(std::string filename) {
   // STUDENT TODO: Implement this function.
+  std::ifstream ifile(filename);
+  std::set<std::string> name_set;
+  std::string name;
+  if (ifile.is_open()){
+    while (std::getline(ifile,name)){
+      name_set.insert(name);
+    }
+  }
+  return name_set;
 }
-
+std::string get_first_letter(std::string name){
+  int l1 = 0;
+  int l2 = name.find(' ') + 1;
+  return std::string(1,name[l1]) + std::string(1,name[l2]);
+}
 /**
  * Takes in a set of student names by reference and returns a queue of names
  * that match the given student name.
@@ -40,7 +53,14 @@ std::set<std::string> get_applicants(std::string filename) {
  * @return          A queue containing pointers to each matching name.
  */
 std::queue<const std::string*> find_matches(std::string name, std::set<std::string>& students) {
-  // STUDENT TODO: Implement this function.
+  std::queue<const std::string*> match_name;
+  for (auto const& student : students){
+    if(get_first_letter(name)==get_first_letter(student)){
+      match_name.push(&student);
+    }
+  }
+  return match_name;
+  
 }
 
 /**
@@ -54,7 +74,18 @@ std::queue<const std::string*> find_matches(std::string name, std::set<std::stri
  *                Will return "NO MATCHES FOUND." if `matches` is empty.
  */
 std::string get_match(std::queue<const std::string*>& matches) {
-  // STUDENT TODO: Implement this function.
+  if (matches.empty()){
+    return "NO MATCHES FOUND.";
+  }
+  else{
+    for (size_t i = 0; i < matches.size()/2; i++)
+    {
+      matches.pop();
+    }
+    
+    return *matches.front();
+  }
+  
 }
 
 /* #### Please don't remove this line! #### */

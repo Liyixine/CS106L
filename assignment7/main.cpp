@@ -52,6 +52,14 @@ template <typename T> struct ListNode {
  */
 template <typename T> cs106l::unique_ptr<ListNode<T>> create_list(const std::vector<T>& values) {
   /* STUDENT TODO: Implement this method */
+  cs106l::unique_ptr<ListNode<T>> head = nullptr;
+  for (int i = values.size()-1; i > -1 ; i--)
+  {
+    cs106l::unique_ptr<ListNode<T>> node = cs106l::make_unique<ListNode<T>>(values[i]);
+    node->next = std::move(head);
+    head = std::move(node);
+  }
+  return head;
   throw std::runtime_error("Not implemented: createList");
 }
 
@@ -64,8 +72,9 @@ template <typename T> cs106l::unique_ptr<ListNode<T>> create_list(const std::vec
  */
 template <typename T, typename Func>
 void map_list(const cs106l::unique_ptr<ListNode<T>>& head, const Func& func) {
-  if (!head)
+  if (!head){
     return;
+  }
   func(head->value);
   map_list(head->next, func);
 }

@@ -13,7 +13,7 @@ namespace cs106l {
 template <typename T> class unique_ptr {
 private:
   /* STUDENT TODO: What data must a unique_ptr keep track of? */
-
+  T* ptr;
 public:
   /**
    * @brief Constructs a new `unique_ptr` from the given pointer.
@@ -22,6 +22,8 @@ public:
    */
   unique_ptr(T* ptr) {
     /* STUDENT TODO: Implement the constructor */
+    this->ptr = ptr;
+    return;
     throw std::runtime_error("Not implemented: unique_ptr(T* ptr)");
   }
 
@@ -30,6 +32,8 @@ public:
    */
   unique_ptr(std::nullptr_t) {
     /* STUDENT TODO: Implement the nullptr constructor */
+    this->ptr = nullptr;
+    return;
     throw std::runtime_error("Not implemented: unique_ptr(std::nullptr_t)");
   }
 
@@ -45,6 +49,7 @@ public:
    */
   T& operator*() {
     /* STUDENT TODO: Implement the dereference operator */
+    return *(this->ptr);
     throw std::runtime_error("Not implemented: operator*()");
   }
 
@@ -54,6 +59,7 @@ public:
    */
   const T& operator*() const {
     /* STUDENT TODO: Implement the dereference operator (const) */
+    return *(this->ptr);
     throw std::runtime_error("Not implemented: operator*() const");
   }
 
@@ -64,6 +70,7 @@ public:
    */
   T* operator->() {
     /* STUDENT TODO: Implement the arrow operator */
+    return this->ptr;
     throw std::runtime_error("Not implemented: operator->()");
   }
 
@@ -74,6 +81,7 @@ public:
    */
   const T* operator->() const {
     /* STUDENT TODO: Implement the arrow operator */
+    return this->ptr;
     throw std::runtime_error("Not implemented: operator->() const");
   }
 
@@ -84,6 +92,7 @@ public:
    */
   operator bool() const {
     /* STUDENT TODO: Implement the boolean conversion operator */
+    return !(this->ptr == nullptr);
     throw std::runtime_error("Not implemented: operator bool() const");
   }
 
@@ -94,6 +103,27 @@ public:
    * - Implement the move constructor
    * - Implement the move assignment operator
    */
+  ~unique_ptr(){
+    delete this->ptr;
+  }
+  unique_ptr (const unique_ptr& ptr) = delete;
+  unique_ptr& operator = (const unique_ptr& ptr) = delete;
+  unique_ptr (unique_ptr&& ptr){
+    this->ptr = ptr.ptr;
+    ptr.ptr = nullptr;
+  }
+  unique_ptr& operator = (unique_ptr&& ptr){
+    if( this == &ptr){
+      /*delete this->ptr;
+      this->ptr = nullptr;*/     
+    }else{
+      T* temp_ptr = ptr.ptr;
+      ptr.ptr = nullptr;
+      delete this->ptr;
+      this->ptr = temp_ptr;     
+    }
+    return *this;
+  }
 };
 
 /**
